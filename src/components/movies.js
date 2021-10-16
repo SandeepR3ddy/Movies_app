@@ -9,10 +9,10 @@ export default class Movies extends Component {
                 movies:getMovies()
             } 
         }
-        handleDelete = (title) =>{
+        handleDelete = (id) =>{
          let newAr = this.state.movies.filter(Obj =>
             {
-              return Obj.title != title;
+              return Obj._id != id;
             })
             this.setState({movies:newAr});
         }
@@ -44,7 +44,7 @@ export default class Movies extends Component {
                 <td>{movieObj.genre.name}</td>
                 <td>{movieObj.numberInStock}</td>
                 <td>{movieObj.dailyRentalRate}</td>
-                <td><button type="button" className ="btn btn-danger" onClick = {() => this.handleDelete(movieObj.title)}>Delete</button></td>                
+                <td><button type="button" className ="btn btn-danger" onClick = {() => this.handleDelete(movieObj._id)}>Delete</button></td>                
                 </tr>
         )
         )
@@ -57,3 +57,4 @@ export default class Movies extends Component {
         )
     }
 }
+ 
