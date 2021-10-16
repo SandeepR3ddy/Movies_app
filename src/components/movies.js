@@ -24,30 +24,43 @@ export default class Movies extends Component {
             this.setState({
                 currSearchText : val
             })
-       /*      if(val == "")
-            {
-               this.setState(
-                   {
-                       filteredMovies : this.state.movies,
-                       currSearchText : ""
-                   }
-               )
-            }
-            else
-            {
-                let filteredArr = this.state.movies.filter(movieObj => 
-                    {
-                       let title = movieObj.title.trim().toLowerCase();
-                       return title.includes(val.toLowerCase()) ;
-                    })
-                    this.setState(
-                        {
-                            filteredMovies  : filteredArr,
-                            currSearchText  : val
-                        }
-                    )
-            } */
            }
+           sortByRatings = (e) =>{
+             let className = e.target.className;
+             let sortedMovies = [];
+             if(className == "fas fa-sort-up")
+             {
+                 sortedMovies = this.state.movies.sort(function(movieObjA,movieObjB)
+                 {
+                     return (movieObjA.dailyRentalRate - movieObjB.dailyRentalRate);
+                 }) 
+             }
+             else if(className == "fas fa-sort-down"){
+                sortedMovies = this.state.movies.sort(function(movieObjA,movieObjB)
+                {
+                    return movieObjB.dailyRentalRate - movieObjA.dailyRentalRate;
+                })
+             }
+              this.setState({movies:sortedMovies});
+           }
+           sortByStocks = (e) =>{
+            let className = e.target.className;
+            let sortedMovies = [];
+            if(className == "fas fa-sort-up")
+            {
+                sortedMovies = this.state.movies.sort(function(movieObjA,movieObjB)
+                {
+                    return (movieObjA.numberInStock - movieObjB.numberInStock);
+                }) 
+            }
+            else if(className == "fas fa-sort-down"){
+               sortedMovies = this.state.movies.sort(function(movieObjA,movieObjB)
+               {
+                   return movieObjB.numberInStock - movieObjA.numberInStock;
+               })
+            }
+             this.setState({movies:sortedMovies});
+          }
     render() {
         let {movies,currSearchText} = this.state;
         let filteredMovies = [];
@@ -75,8 +88,16 @@ export default class Movies extends Component {
     <tr>
       <th scope="col">Title</th>
       <th scope="col">Genre</th>
-      <th scope="col">Stock</th>
-      <th scope="col">Rate</th>
+      <th scope="col">
+      <i onClick = {this.sortByStocks} className ="fas fa-sort-up"></i>
+          Stock
+          <i  onClick = {this.sortByStocks} className ="fas fa-sort-down"></i>
+          </th>
+      <th scope="col">
+      <i  onClick = {this.sortByRatings} className ="fas fa-sort-up"></i>
+          Rate
+          <i onClick = {this.sortByRatings} className ="fas fa-sort-down"></i>
+          </th>
       <th scope="col"></th>
     </tr>
   </thead>
