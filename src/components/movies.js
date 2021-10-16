@@ -6,18 +6,62 @@ export default class Movies extends Component {
         {
             super(props);
             this.state = {
-                movies:getMovies()
+                movies:getMovies(),
+                currSearchText : ""
             } 
         }
-        handleDelete = (id) =>{
+        handleDelete = (title) =>{
          let newAr = this.state.movies.filter(Obj =>
             {
-              return Obj._id != id;
+              return Obj.title != title;
             })
-            this.setState({movies:newAr});
+            this.setState({
+                movies : newAr,
+                });
         }
+        handleChange = (e) =>{
+            let val = e.target.value;
+            this.setState({
+                currSearchText : val
+            })
+       /*      if(val == "")
+            {
+               this.setState(
+                   {
+                       filteredMovies : this.state.movies,
+                       currSearchText : ""
+                   }
+               )
+            }
+            else
+            {
+                let filteredArr = this.state.movies.filter(movieObj => 
+                    {
+                       let title = movieObj.title.trim().toLowerCase();
+                       return title.includes(val.toLowerCase()) ;
+                    })
+                    this.setState(
+                        {
+                            filteredMovies  : filteredArr,
+                            currSearchText  : val
+                        }
+                    )
+            } */
+           }
     render() {
-        
+        let {movies,currSearchText} = this.state;
+        let filteredMovies = [];
+        if(currSearchText != "")
+        {
+           filteredMovies = movies.filter(movieObj => 
+            {
+               let title = movieObj.title.trim().toLowerCase();
+               return title.includes(currSearchText.toLowerCase()) ;
+            })
+        }
+        else{
+            filteredMovies  = movies;
+        }
         return (
             <div className = "container">
             <div className = "row">
@@ -25,7 +69,7 @@ export default class Movies extends Component {
                     <h1>Hello</h1>
                 </div>
                 <div className = "col-9">
-                    <input type = "text"></input>
+                    <input type = "text" onChange = {this.handleChange} val = {this.state.currSearchText} ></input>
                 <table className ="table">
   <thead>
     <tr>
@@ -38,13 +82,13 @@ export default class Movies extends Component {
   </thead>
   <tbody>
     {
-        this.state.movies.map(movieObj =>(
-            <tr scope = "row" >
+       filteredMovies.map(movieObj =>(
+            <tr scope = "row" key = {movieObj._id}>
                 <td>{movieObj.title}</td>
                 <td>{movieObj.genre.name}</td>
                 <td>{movieObj.numberInStock}</td>
                 <td>{movieObj.dailyRentalRate}</td>
-                <td><button type="button" className ="btn btn-danger" onClick = {() => this.handleDelete(movieObj._id)}>Delete</button></td>                
+                <td><button type="button" className ="btn btn-danger" onClick = {() => this.handleDelete(movieObj.title)}>Delete</button></td>                
                 </tr>
         )
         )
@@ -57,4 +101,3 @@ export default class Movies extends Component {
         )
     }
 }
- 
