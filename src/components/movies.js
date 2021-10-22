@@ -1,15 +1,20 @@
 import React, { Component } from 'react'
 import {getMovies} from './movieService'
+import axios from 'axios'
 
 export default class Movies extends Component {
     constructor(props)
         {
             super(props);
             this.state = {
-                movies:getMovies(),
+                movies: [],
                 currSearchText : "",
                 currPage : 1
             } 
+        }
+        async componentDidMount(){
+            let res = await axios.get('https://backend-react-movie.herokuapp.com/movies');
+            this.setState({movies:res.data.movies});
         }
         handleDelete = (title) =>{
          let newAr = this.state.movies.filter(Obj =>
